@@ -7,12 +7,14 @@ var cheerio = require('cheerio');
 var sanitize = require('sanitize-html');
 var tidy = require('htmltidy2').tidy;
 var slug = require('slug');
+var split = require('split');
 
 
 var outputDir = './output/';
+var hrworksArticlesFile = 'remaining-hrworks-articles.txt';
 
+var baseURL = 'http://www.hrworks-inc.com';
 
-// var url = 'http://www.hrworks-inc.com/topics-in-hr/articles-by-date';
 var localURL = 'http://127.0.0.1:8002/Articles.html';
 // we want to use a local downloaded version of the page so we don't affect the analytics
 
@@ -46,7 +48,7 @@ function getHRWorksArticleURLS (html) {
     });
 
     // create a text file with the array
-    outputFile('remaining-hrworks-articles.txt', urlStrings);
+    outputFile(hrworksArticlesFile, urlStrings);
 }
 
 
@@ -103,12 +105,21 @@ function init () {
     //     }
     // });
 
-    request(articleURL, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            processArticle(articleURL, body);
-        }
-    });
+    // // process a single article
+    // request(articleURL, function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         processArticle(articleURL, body);
+    //     }
+    // });
 
+    // console.log('read the file');
+    fs.createReadStream(outputDir + hrworksArticlesFile)
+        .pipe(split())
+        .on('data', function (line) {
+            if (line !== '') {
+                console.log(baseURL + line);
+            }
+        });
 }
 
 
