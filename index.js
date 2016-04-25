@@ -6,6 +6,7 @@ var request = require('request');
 var cheerio = require('cheerio');
 var sanitize = require('sanitize-html');
 var tidy = require('htmltidy2').tidy;
+var slug = require('slug');
 
 
 var outputDir = './output/';
@@ -78,14 +79,17 @@ function processArticle (html) {
 
 
 function articleOutput (title, html) {
+    var filename = slug(title).toLowerCase() + '.txt';
     var output = '';
     output += 'TITLE\n';
     output += title;
-    output += '\n----------------------------------------\n';
+    output += '\n\n';
     output += 'BODY\n';
     output += html;
 
-    outputFile('test.txt', output);
+    // console.log(title);
+    // console.log(filename);
+    outputFile(filename, output);
 }
 
 
