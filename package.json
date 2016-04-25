@@ -1,0 +1,16 @@
+{
+  "name": "page-scraper",
+  "version": "1.0.0",
+  "description": "page scraper run",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zapo",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.20.0",
+    "request": "^2.72.0",
+    "sanitize-html": "^1.11.4"
+  }
+}
