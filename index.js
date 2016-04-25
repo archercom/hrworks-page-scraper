@@ -112,12 +112,19 @@ function init () {
     //     }
     // });
 
-    // console.log('read the file');
+
+    // do the thing
     fs.createReadStream(outputDir + hrworksArticlesFile)
         .pipe(split())
         .on('data', function (line) {
             if (line !== '') {
-                console.log(baseURL + line);
+                var url = baseURL + line;
+                // process a single article
+                request(url, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        processArticle(url, body);
+                    }
+                });
             }
         });
 }
