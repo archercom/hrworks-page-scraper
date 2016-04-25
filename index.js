@@ -51,7 +51,7 @@ function getHRWorksArticleURLS (html) {
 
 
 
-function processArticle (html) {
+function processArticle (url, html) {
     // target the correct HTML
     var $ = cheerio.load(html);
     var title = $('title').text();
@@ -72,23 +72,24 @@ function processArticle (html) {
         indent: true,
         showBodyOnly: true
     }, function (err, html2) {
-        articleOutput(title, html2);
+        articleOutput(url, title, html2);
     });
 }
 
 
 
-function articleOutput (title, html) {
+function articleOutput (url, title, html) {
     var filename = slug(title).toLowerCase() + '.txt';
     var output = '';
+    output += 'URL\n';
+    output += url;
+    output += '\n\n';
     output += 'TITLE\n';
     output += title;
     output += '\n\n';
     output += 'BODY\n';
     output += html;
 
-    // console.log(title);
-    // console.log(filename);
     outputFile(filename, output);
 }
 
@@ -104,7 +105,7 @@ function init () {
 
     request(articleURL, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            processArticle(body);
+            processArticle(articleURL, body);
         }
     });
 
