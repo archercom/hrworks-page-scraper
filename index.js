@@ -33,6 +33,7 @@ function outputFile (filename, content) {
 }
 
 
+
 function getHRWorksArticleURLS (html) {
     var $ = cheerio.load(html);
 
@@ -48,22 +49,21 @@ function getHRWorksArticleURLS (html) {
 }
 
 
-function processArticle (html) {
 
+function processArticle (html) {
     // target the correct HTML
     var $ = cheerio.load(html);
+    var title = $('title').text();
+
+
+    $('.contentheading').remove();
     var article = $('#article').html();
-
-
-    // raw html we're working with
-    outputFile('article--raw.html', article);
 
 
     // sanitize the HTML
     article = sanitize(article, {
-        allowedTags: sanitize.defaults.allowedTags.concat([ 'img', 'h2', 'h3' ])
+        allowedTags: sanitize.defaults.allowedTags.concat(['img'])
     });
-    outputFile('article--sanitized.html', article);
 
 
     // tidy html
@@ -71,8 +71,21 @@ function processArticle (html) {
         indent: true,
         showBodyOnly: true
     }, function (err, html2) {
-        outputFile('article--tidy.html', html2);
+        articleOutput(title, html2);
     });
+}
+
+
+
+function articleOutput (title, html) {
+    var output = '';
+    output += 'TITLE\n';
+    output += title;
+    output += '\n----------------------------------------\n';
+    output += 'BODY\n';
+    output += html;
+
+    outputFile('test.txt', output);
 }
 
 
