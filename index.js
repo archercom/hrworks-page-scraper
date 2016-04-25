@@ -5,7 +5,7 @@ var path = require('path');
 var request = require('request');
 var cheerio = require('cheerio');
 var sanitize = require('sanitize-html');
-var exec = require('child_process').exec;
+var tidy = require('htmltidy2').tidy;
 
 
 var outputDir = './output/';
@@ -50,26 +50,29 @@ function getHRWorksArticleURLS (html) {
 
 function processArticle (html) {
 
-    // console.log(html);
-    // console.log(typeof html);
-    // // raw html we're working with
-    // outputFile('article-test--raw.html', html);
-
-    // // sanitize the HTML
-    // var article = sanitize(html, {
-    //     allowedTags: sanitize.defaults.allowedTags.concat([ 'img', 'h2', 'h3', 'title' ])
-    // });
-    // outputFile('article-test--sanitized.html', article);
-
-
-    // var $ = cheerio.load(html);
     // target the correct HTML
-    // var article = $('#article').html();
+    var $ = cheerio.load(html);
+    var article = $('#article').html();
 
 
-    // tidy it up
-    // console.log('tidy it up');
-    // outputFile('article-test--sanitizes.html', article);
+    // raw html we're working with
+    outputFile('article--raw.html', article);
+
+
+    // sanitize the HTML
+    article = sanitize(article, {
+        allowedTags: sanitize.defaults.allowedTags.concat([ 'img', 'h2', 'h3' ])
+    });
+    outputFile('article--sanitized.html', article);
+
+
+    // tidy html
+    tidy(article, {
+        indent: true,
+        showBodyOnly: true
+    }, function (err, html2) {
+        outputFile('article--tidy.html', html2);
+    });
 }
 
 
