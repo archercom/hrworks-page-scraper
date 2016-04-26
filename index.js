@@ -10,13 +10,17 @@ var slug = require('slug');
 var split = require('split');
 
 
+// output things to:
 var outputDir = './output/';
-var hrworksArticlesFile = 'remaining-hrworks-articles.txt';
 
+// files to read from
+var articlesByDateFile = 'remaining-hrworks-articles.txt';
+
+
+// urls
 var baseURL = 'http://www.hrworks-inc.com';
-
-var localURL = 'http://127.0.0.1:8002/Articles.html';
 // we want to use a local downloaded version of the page so we don't affect the analytics
+var articlesByDateURL = 'http://127.0.0.1:8002/Articles.html';
 
 // handle a single article
 var articleURL = 'http://127.0.0.1:8002/What%E2%80%99s%20the%20Secret%20Sauce%20to%20Effective%20Performance%20Management_.html';
@@ -37,10 +41,10 @@ function outputFile (filename, content) {
 
 
 
-function getHRWorksArticleURLS (html) {
+function getHRWorksArticleURLS (html, selectorString, outputFilename) {
     var $ = cheerio.load(html);
 
-    var links = $('.blog_more table tr a').toArray();
+    var links = $(selectorString).toArray();
     var urlStrings = '';
 
     links.forEach(function (link) {
@@ -48,7 +52,7 @@ function getHRWorksArticleURLS (html) {
     });
 
     // create a text file with the array
-    outputFile(hrworksArticlesFile, urlStrings);
+    outputFile(outputFilename, urlStrings);
 }
 
 
@@ -60,6 +64,7 @@ function processArticle (url, html) {
 
 
     $('.contentheading').remove();
+    $('.contentheading_pr').remove();
     var article = $('#article').html();
 
 
@@ -98,12 +103,26 @@ function articleOutput (url, title, html) {
 
 
 function init () {
-    // // get all remaining URLs we have to hit
-    // request(localURL, function (error, response, body) {
+    // get all remaining URLs we have to hit
+    // ----------------------------------------
+    // // articles by date
+    // request(articlesByDateURL, function (error, response, body) {
     //     if (!error && response.statusCode == 200) {
-    //         getHRWorksArticleURLS(body);
+    //         getHRWorksArticleURLS(body, '.blog_more table tr a', articlesByDateFile);
     //     }
     // });
+
+    // // press releases
+    // request('http://127.0.0.1:8002/Press%20Releases.html', function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         getHRWorksArticleURLS(
+    //             body,
+    //             '#component table tr a',
+    //             'press-release-urls.txt'
+    //         );
+    //     }
+    // });
+
 
     // // process a single article
     // request(articleURL, function (error, response, body) {
@@ -114,19 +133,21 @@ function init () {
 
 
     // do the thing
-    fs.createReadStream(outputDir + hrworksArticlesFile)
-        .pipe(split())
-        .on('data', function (line) {
-            if (line !== '') {
-                var url = baseURL + line;
-                // process a single article
-                request(url, function (error, response, body) {
-                    if (!error && response.statusCode == 200) {
-                        processArticle(url, body);
-                    }
-                });
-            }
-        });
+    // // fs.createReadStream(articlesByDateFile)
+    // fs.createReadStream('press-release-urls.txt')
+    //     .pipe(split())
+    //     .on('data', function (line) {
+    //         if (line !== '') {
+    //             var url = baseURL + line;
+    //             // process a single article
+    //             // request(url, function (error, response, body) {
+    //             request(line, function (error, response, body) {
+    //                 if (!error && response.statusCode == 200) {
+    //                     processArticle(url, body);
+    //                 }
+    //             });
+    //         }
+    //     });
 }
 
 

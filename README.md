@@ -14,3 +14,19 @@ for a single article:
 HTML --> sanitize --> tidy --> markdown
 
 loop through a file with urls on each line
+
+
+1. provide file with urls on each line
+2. specify DOM target with a selector, '#article'
+
+Outputs text files with:
+- original URL
+- article title (grabbed from the page title)
+- the article HTML (sanitized and tidied)
+
+
+We have:
+Articles by date: √
+Articles by category:  create file with target URLs
+Industry Updates:  create file with target URLs
+Press Releases: *, created but the numbers don't match up, might be missing 10
