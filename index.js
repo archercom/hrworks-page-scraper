@@ -85,11 +85,18 @@ function processArticle (url, html) {
 
 
 function processLastModified (url, lastModified) {
+    var lastModifiedFile = 'output/last-modified.txt';
+    // var lastModifiedFile = 'output/last-modified--test.txt';
     var output = '';
     output += lastModified;
     output += '\t';
     output += url;
-    console.log(output);
+    output += '\n';
+    // console.log(output);
+    fs.appendFile(lastModifiedFile, output, function (err) {
+        if (err) throw err;
+        console.log('wrote last-modified date for: ' + url);
+    });
 }
 
 
@@ -112,6 +119,8 @@ function articleOutput (url, title, html) {
 
 
 function init () {
+    console.log('code in init() function is commented out');
+
     // get all remaining URLs we have to hit
     // ----------------------------------------
     // // articles by date
@@ -159,31 +168,35 @@ function init () {
     // });
 
 
-    // ----------------------------------------
-    // process a single article
-    request(articleURL, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            processLastModified(articleURL, response.headers['last-modified']);
-            // processArticle(articleURL, body);
-        }
-    });
-    // ----------------------------------------
+    // // ----------------------------------------
+    // // process a single article
+    // request(articleURL, function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         console.log(response.headers);
+    //         // processLastModified(articleURL, response.headers);
+    //         // processLastModified(articleURL, response.headers);
+    //         // processLastModified(articleURL, response.headers['last-modified']);
+    //         // processArticle(articleURL, body);
+    //     }
+    // });
+    // // ----------------------------------------
 
 
     // do the thing
     // fs.createReadStream('url-files/articles-by-category-urls.txt')
-    // fs.createReadStream('url-files/articles-by-date-urls.txt')
-    // fs.createReadStream('url-files/industry-updates-urls.txt')
-    // fs.createReadStream('url-files/press-release-urls.txt')
+    // // fs.createReadStream('url-files/articles-by-date-urls.txt')
+    // // fs.createReadStream('url-files/industry-updates-urls.txt')
+    // // fs.createReadStream('url-files/press-release-urls.txt')
     //     .pipe(split())
     //     .on('data', function (line) {
     //         if (line !== '') {
     //             var url = baseURL + line;
     //             // process a single article
-    //             // request(url, function (error, response, body) {
-    //             request(line, function (error, response, body) {
+    //             request(url, function (error, response, body) {
+    //             // request(line, function (error, response, body) {
     //                 if (!error && response.statusCode == 200) {
-    //                     processArticle(url, body);
+    //                     // processArticle(url, body);
+    //                     processLastModified(url, response.headers['last-modified']);
     //                 }
     //             });
     //         }
