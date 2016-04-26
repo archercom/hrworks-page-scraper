@@ -123,6 +123,16 @@ function init () {
     //     }
     // });
 
+    // articles by category
+    request('http://127.0.0.1:8002/Articles%20by%20Category.html', function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            getHRWorksArticleURLS(
+                body,
+                '#component .articles a',
+                'articles-by-category-urls.txt'
+            );
+        }
+    });
 
     // // process a single article
     // request(articleURL, function (error, response, body) {
