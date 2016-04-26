@@ -10,20 +10,19 @@ var slug = require('slug');
 var split = require('split');
 
 
+
 // output things to:
 var outputDir = './output/';
 
-// files to read from
-var articlesByDateFile = 'remaining-hrworks-articles.txt';
 
 
 // urls
 var baseURL = 'http://www.hrworks-inc.com';
 // we want to use a local downloaded version of the page so we don't affect the analytics
 var articlesByDateURL = 'http://127.0.0.1:8002/Articles.html';
-
-// handle a single article
 var articleURL = 'http://127.0.0.1:8002/What%E2%80%99s%20the%20Secret%20Sauce%20to%20Effective%20Performance%20Management_.html';
+
+
 
 
 
@@ -85,6 +84,16 @@ function processArticle (url, html) {
 
 
 
+function processLastModified (url, lastModified) {
+    var output = '';
+    output += lastModified;
+    output += '\t';
+    output += url;
+    console.log(output);
+}
+
+
+
 function articleOutput (url, title, html) {
     var filename = slug(title).toLowerCase() + '.txt';
     var output = '';
@@ -108,7 +117,11 @@ function init () {
     // // articles by date
     // request(articlesByDateURL, function (error, response, body) {
     //     if (!error && response.statusCode == 200) {
-    //         getHRWorksArticleURLS(body, '.blog_more table tr a', articlesByDateFile);
+    //         getHRWorksArticleURLS(
+    //             body,
+    //             '.blog_more table tr a',
+    //             'remaining-hrworks-articles.txt'
+    //         );
     //     }
     // });
 
@@ -146,19 +159,22 @@ function init () {
     // });
 
 
-    // // ----------------------------------------
-    // // process a single article
-    // request(articleURL, function (error, response, body) {
-    //     if (!error && response.statusCode == 200) {
-    //         processArticle(articleURL, body);
-    //     }
-    // });
-    // // ----------------------------------------
+    // ----------------------------------------
+    // process a single article
+    request(articleURL, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            processLastModified(articleURL, response.headers['last-modified']);
+            // processArticle(articleURL, body);
+        }
+    });
+    // ----------------------------------------
 
 
     // do the thing
-    // // fs.createReadStream(articlesByDateFile)
-    // fs.createReadStream('press-release-urls.txt')
+    // fs.createReadStream('url-files/articles-by-category-urls.txt')
+    // fs.createReadStream('url-files/articles-by-date-urls.txt')
+    // fs.createReadStream('url-files/industry-updates-urls.txt')
+    // fs.createReadStream('url-files/press-release-urls.txt')
     //     .pipe(split())
     //     .on('data', function (line) {
     //         if (line !== '') {
