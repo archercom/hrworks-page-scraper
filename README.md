@@ -27,6 +27,6 @@ Outputs text files with:
 
 We have:
 Articles by date: √
-Articles by category:  create file with target URLs
+Articles by category:  output file
 Industry Updates:  create file with target URLs
 Press Releases: *, created but the numbers don't match up, might be missing 10

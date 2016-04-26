@@ -123,23 +123,37 @@ function init () {
     //     }
     // });
 
-    // articles by category
-    request('http://127.0.0.1:8002/Articles%20by%20Category.html', function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            getHRWorksArticleURLS(
-                body,
-                '#component .articles a',
-                'articles-by-category-urls.txt'
-            );
-        }
-    });
+    // // articles by category
+    // request('http://127.0.0.1:8002/Articles%20by%20Category.html', function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         getHRWorksArticleURLS(
+    //             body,
+    //             '#component .articles li > a',
+    //             'articles-by-category-urls.txt'
+    //         );
+    //     }
+    // });
 
+    // // industry updates
+    // request('http://127.0.0.1:8002/Industry%20Updates.html', function (error, response, body) {
+    //     if (!error && response.statusCode == 200) {
+    //         getHRWorksArticleURLS(
+    //             body,
+    //             '#component .articles li > a',
+    //             'industry-updates-urls.txt'
+    //         );
+    //     }
+    // });
+
+
+    // // ----------------------------------------
     // // process a single article
     // request(articleURL, function (error, response, body) {
     //     if (!error && response.statusCode == 200) {
     //         processArticle(articleURL, body);
     //     }
     // });
+    // // ----------------------------------------
 
 
     // do the thing
