@@ -13,6 +13,7 @@ var split = require('split');
 
 // output things to:
 var outputDir = './output/';
+var logFile = outputDir + 'log.txt';
 
 
 
@@ -182,7 +183,7 @@ function init () {
     // // ----------------------------------------
 
 
-    // do the thing
+    // // do the thing
     // fs.createReadStream('url-files/articles-by-category-urls.txt')
     // // fs.createReadStream('url-files/articles-by-date-urls.txt')
     // // fs.createReadStream('url-files/industry-updates-urls.txt')
@@ -190,13 +191,22 @@ function init () {
     //     .pipe(split())
     //     .on('data', function (line) {
     //         if (line !== '') {
-    //             var url = baseURL + line;
+
+    //             // var url = baseURL + line; // NOTE: press release URLs have full paths
+    //             var url = line; // use this if grabbing from press-release-urls.txt
+
     //             // process a single article
     //             request(url, function (error, response, body) {
-    //             // request(line, function (error, response, body) {
     //                 if (!error && response.statusCode == 200) {
-    //                     // processArticle(url, body);
-    //                     processLastModified(url, response.headers['last-modified']);
+    //                     processArticle(url, body);
+    //                     // processLastModified(url, response.headers['last-modified']);
+    //                 } else {
+    //                     // // for error reporting, not very accurate...
+    //                     // fs.appendFile(logFile, url + '\n', function (err) {
+    //                     //     if (err) throw err;
+    //                     //     console.log('updated logfile, error: ' + url);
+    //                     //     // console.log('wrote last-modified date for: ' + url);
+    //                     // });
     //                 }
     //             });
     //         }
