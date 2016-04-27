@@ -58,6 +58,11 @@ function getHRWorksArticleURLS (html, selectorString, outputFilename) {
 
 
 function processArticle (url, html) {
+
+    // create filename based on url, more unique (there can only be 1 url)
+    var urlSplitArray = url.split('/');
+    var filename = urlSplitArray[urlSplitArray.length - 1] + '.txt';
+
     // target the correct HTML
     var $ = cheerio.load(html);
     var title = $('title').text();
@@ -79,7 +84,7 @@ function processArticle (url, html) {
         indent: true,
         showBodyOnly: true
     }, function (err, html2) {
-        articleOutput(url, title, html2);
+        articleOutput(filename, url, title, html2);
     });
 }
 
@@ -102,8 +107,7 @@ function processLastModified (url, lastModified) {
 
 
 
-function articleOutput (url, title, html) {
-    var filename = slug(title).toLowerCase() + '.txt';
+function articleOutput (filename, url, title, html) {
     var output = '';
     output += 'URL\n';
     output += url;
@@ -120,7 +124,7 @@ function articleOutput (url, title, html) {
 
 
 function init () {
-    console.log('code in init() function is commented out');
+    // console.log('code in init() function is commented out');
 
     // get all remaining URLs we have to hit
     // ----------------------------------------
@@ -173,27 +177,24 @@ function init () {
     // // process a single article
     // request(articleURL, function (error, response, body) {
     //     if (!error && response.statusCode == 200) {
-    //         console.log(response.headers);
-    //         // processLastModified(articleURL, response.headers);
-    //         // processLastModified(articleURL, response.headers);
     //         // processLastModified(articleURL, response.headers['last-modified']);
-    //         // processArticle(articleURL, body);
+    //         processArticle(articleURL, body);
     //     }
     // });
     // // ----------------------------------------
 
 
-    // // do the thing
+    // do the thing
     // fs.createReadStream('url-files/articles-by-category-urls.txt')
-    // // fs.createReadStream('url-files/articles-by-date-urls.txt')
-    // // fs.createReadStream('url-files/industry-updates-urls.txt')
-    // // fs.createReadStream('url-files/press-release-urls.txt')
+    // fs.createReadStream('url-files/articles-by-date-urls.txt')
+    // fs.createReadStream('url-files/industry-updates-urls.txt')
+    // fs.createReadStream('url-files/press-release-urls.txt')
+    // fs.createReadStream('url-files/missing-article-urls.txt')
     //     .pipe(split())
     //     .on('data', function (line) {
     //         if (line !== '') {
-
     //             // var url = baseURL + line; // NOTE: press release URLs have full paths
-    //             var url = line; // use this if grabbing from press-release-urls.txt
+    //             var url = line; // use this if grabbing from press-release-urls.txt or missing-articles
 
     //             // process a single article
     //             request(url, function (error, response, body) {
